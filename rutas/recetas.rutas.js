@@ -2,9 +2,11 @@ const express = require ('express');
 const router = express.Router();
 
 const controller = require('../controllers/recetas.controller');
-router.get('/', controller.index);
+
+router.get('/recetas', controller.index);
+
 //METODO GET 
-router.get('/:id', (req,res)=> {
+/*router.get('/:id', (req,res)=> {
     console.log(req.params.id);
     const producto = receta.find(elemento => elemento.id== req.params.id)
 
@@ -58,6 +60,6 @@ router.post('/', (req, res)=> {
     res.status(201).send(receta);
 
     res.send("POST");
-})
+})*/
 
 module.exports = router;

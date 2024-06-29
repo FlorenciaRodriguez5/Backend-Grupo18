@@ -9,10 +9,10 @@ const connection = mysql.createConnection({
 
 connection.connect((error)=> {
     if(error) {
-        console.log(error);
+        return console.error(error);
     }
     console.log("¡Conexión Exitosa!");
 });
-// ESTA ESTRUCTURA DE CODIGO ES SIEMPREE IGUAL SOLO CAMBIA LA INFORMACION de LA BASE DE DATOS
+// ESTA ESTRUCTURA DE CODIGO ES SIEMPRE IGUAL SOLO CAMBIA LA INFORMACION de LA BASE DE DATOS
 
 module.exports = connection;
