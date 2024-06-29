@@ -1,7 +1,7 @@
 {
-  "name": "express-api-24131",
+  "name": "backend-g-18",
   "version": "1.0.0",
-  "description": "",
+  "description": "proyecto backend grupo 18",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,10 +9,13 @@
     "dev": "nodemon index.js",
     "watch": "node --watch index.js"
   },
-  "author": "CaC",
+  "author": "g18",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "modules": "^0.4.0",
+    "mysql2": "^3.10.1",
+    "node": "^20.15.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.3"
