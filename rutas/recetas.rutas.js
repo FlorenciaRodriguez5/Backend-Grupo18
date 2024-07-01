@@ -4,11 +4,15 @@ const router = express.Router();
 const controller = require('../controllers/recetas.controller');
 
 router.get('/recetas', controller.index);
+router.get("/:id", controller.show);
+router.post("/", controller.store);
+router.put("/:id", controller.update);
+router.delete("/:id", controller.destroy);
 
 //METODO GET 
 /*router.get('/:id', (req,res)=> {
     console.log(req.params.id);
-    const producto = receta.find(elemento => elemento.id== req.params.id)
+    const receta = receta.find(elemento => elemento.id== req.params.id)
 
     if(!receta) {
         return res.status(404).send( { error: 'No existe la receta'}) 
@@ -27,7 +31,7 @@ router.put('/:id', (req,res) => {
     }
 
     receta.nombre =req.body.nombre
-    receta.stock =req.body.stock
+    receta.tipo =req.body.tipo
     res.send(receta)
 })
 //METODO DELETE 
@@ -43,7 +47,7 @@ router.delete('/:id', (req,res) => {
     }
 
     const recetaIndex = receta.findIndex(elemento => elemento.id== req.params.id)
-    receta.splice(productoIndex, 1);
+    receta.splice(recetaIndex, 1);
     res.send(receta);
 })
 
@@ -51,9 +55,11 @@ router.delete('/:id', (req,res) => {
 router.post('/', (req, res)=> {
     console.log(req.body);
     const receta = {
-        id: receta.length + 1, 
         nombre: req.body.nombre,
         tipo: req.body.tipo,
+        porciones: req.body.porciones, 
+        id: receta.length + 1, 
+        ingredientes: req.body.ingredientes,
     };
     receta.push(receta);
 
