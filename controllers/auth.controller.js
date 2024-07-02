@@ -1,32 +1,62 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const db = require("../db/db");
-require("dotenv").config();
+const db = require('../db/db');
+const { signToken, comparePasswords } = require('../auth/auth');
 
-const register = async (req, res) => {
-  const { username, email, password } = req.body;
-
+exports.register = async (req, res) => {
   try {
-    // Verificar si el usuario ya existe
-    const [rows] = await db.promise().query("SELECT * FROM usuario WHERE email = ?", [email]);
-    if (rows.length > 0) {
-      return res.status(400).json({ error: "El usuario ya existe" });
-    }
+    const { username, password } = req.body;
 
-    // Hashear la contraseña
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Encriptar la contraseña
+    const hashedPassword = await encryptPassword(password);
 
-    // Insertar el nuevo usuario en la base de datos
-    await db.promise().query("INSERT INTO usuario (username, email, password) VALUES (?, ?, ?)", [username, email, hashedPassword]);
+    // Guardar el usuario en la base de datos
+    const sql = 'INSERT INTO usuarios (username, password) VALUES (?, ?)';
+    db.query(sql, [username, hashedPassword], (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: 'Error al registrar el usuario.' });
+      }
 
-    // Crear un token JWT
-    const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+      // Generar un token JWT
+      const token = signToken(result.insertId);
 
-    res.status(201).json({ message: "Usuario registrado exitosamente", token });
+      res.status(201).json({
+        status: 'success',
+        token,
+      });
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Ocurrió un error al registrar el usuario" });
+    res.status(500).json({ error: 'Error interno del servidor.' });
   }
 };
 
-module.exports = { register };
+exports.login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Buscar el usuario en la base de datos por nombre de usuario
+    const sql = 'SELECT * FROM usuarios WHERE username = ?';
+    db.query(sql, [username], async (err, result) => {
+      if (err || result.length === 0) {
+        return res.status(401).json({ error: 'Credenciales incorrectas.' });
+      }
+
+      // Verificar la contraseña
+      const isMatch = await comparePasswords(password, result[0].password);
+
+      if (!isMatch) {
+        return res.status(401).json({ error: 'Credenciales incorrectas.' });
+      }
+
+      // Generar un token JWT
+      const token = signToken(result[0].id);
+
+      res.status(200).json({
+        status: 'success',
+        token,
+      });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
+};
