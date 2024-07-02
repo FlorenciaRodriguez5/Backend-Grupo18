@@ -11,7 +11,6 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -31,14 +30,14 @@ CREATE TABLE `pasteleria` (
   `id` int(10) UNSIGNED NOT NULL,
   `nombre` varchar(60) NOT NULL,
   `dificultad` varchar(50) NOT NULL,
-  ` ingredientes` int(11) NOT NULL
+  `ingredientes` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
 -- Dumping data for table `pasteleria`
 --
 
-INSERT INTO `pasteleria` (`id`, `nombre`, `dificultad`, ` ingredientes`) VALUES
+INSERT INTO `pasteleria` (`id`, `nombre`, `dificultad`, `ingredientes`) VALUES
 (1, 'budin de pan', 'baja', 6),
 (2, 'chipa', 'media', 6),
 (3, 'pancitos de leche', 'media', 8),
@@ -147,15 +146,26 @@ INSERT INTO `recetas` (`nombre`, `tipo`, `porciones`, `id`, `ingredientes`) VALU
 --
 
 CREATE TABLE `usuario` (
-  `Nombre` varchar(30) NOT NULL,
-  `Apellido` varchar(30) DEFAULT NULL,
-  `Correo Electronico` varchar(60) NOT NULL,
-  `Edad` tinyint(3) UNSIGNED DEFAULT NULL,
-  `fecha de nacimiento` date DEFAULT NULL,
-  `fecha` datetime NOT NULL DEFAULT current_timestamp()
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `username` VARCHAR(50) NOT NULL,
+  `email` VARCHAR(100) NOT NULL UNIQUE,
+  `password` VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
+-- --------------------------------------------------------
+
 --
+-- Table structure for table `contactos`
+--
+
+CREATE TABLE `contactos` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `nombre` VARCHAR(50) NOT NULL,
+  `apellido` VARCHAR(50) NOT NULL,
+  `mail` VARCHAR(100) NOT NULL,
+  `comentario` TEXT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
 -- Indexes for dumped tables
 --
 
@@ -183,13 +193,6 @@ ALTER TABLE `postres`
 ALTER TABLE `recetas`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `usuario`
---
-ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`Nombre`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -216,6 +219,7 @@ ALTER TABLE `postres`
 --
 ALTER TABLE `recetas`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
