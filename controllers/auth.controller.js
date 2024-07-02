@@ -1,16 +1,17 @@
 const db = require('../db/db');
-const { signToken, comparePasswords } = require('../auth/auth');
+const { signToken, comparePasswords, encryptPassword } = require('../auth/auth');
 
+// Registro de usuario
 exports.register = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
 
     // Encriptar la contraseña
     const hashedPassword = await encryptPassword(password);
 
     // Guardar el usuario en la base de datos
-    const sql = 'INSERT INTO usuarios (username, password) VALUES (?, ?)';
-    db.query(sql, [username, hashedPassword], (err, result) => {
+    const sql = 'INSERT INTO usuarios (username, email, password) VALUES (?, ?, ?)';
+    db.query(sql, [username, email, hashedPassword], (err, result) => {
       if (err) {
         return res.status(500).json({ error: 'Error al registrar el usuario.' });
       }
@@ -29,6 +30,7 @@ exports.register = async (req, res) => {
   }
 };
 
+// Login de usuario
 exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -53,6 +55,29 @@ exports.login = async (req, res) => {
       res.status(200).json({
         status: 'success',
         token,
+      });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
+};
+
+// Procesar formulario de contacto
+exports.procesarContacto = async (req, res) => {
+  try {
+    const { nombre, apellido, mail, comentario } = req.body;
+
+    // Guardar datos en la base de datos
+    const sql = 'INSERT INTO contactos (nombre, apellido, mail, comentario) VALUES (?, ?, ?, ?)';
+    db.query(sql, [nombre, apellido, mail, comentario], (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: 'Error al procesar el formulario de contacto.' });
+      }
+
+      res.status(200).json({
+        status: 'success',
+        message: '¡Formulario enviado correctamente!',
       });
     });
   } catch (error) {
