@@ -1,9 +1,9 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
-const jwt = require("jsonwebtoken"); // Asegúrate de tener jwt importado
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 const authController = require("../controllers/auth.controller");
-const { verifyToken } = require("../auth/auth"); // Importa el middleware verifyToken
+const { verifyToken } = require("../auth/auth");
 
 // Middleware para validar el token en rutas protegidas
 const authenticateToken = (req, res, next) => {
