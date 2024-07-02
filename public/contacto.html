@@ -1,12 +1,77 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contacto</title>
-    <link rel="stylesheet" href="./css/style.css" />
-  </head>
-  <body>
-    <h1>Contacto</h1>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto Cocina18</title>
+    <link rel="stylesheet" href="../CSS/styleform.css"> <!-- Ruta ajustada -->
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/dfe49f8610.js" crossorigin="anonymous"></script>
+    <!-- Tu script personalizado -->
+    <script type="text/javascript" src="../Js/form.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Contacto Ollas y Fogones</h1>
+    </header>
+    <div class="containerform">
+        <fieldset>
+            <legend>Tipo de contacto</legend>
+            <form id="contactForm">
+                <select name="consulta" id="consulta">
+                    <option value="1">Agregar recetas</option>
+                    <option value="2">Trabajar con nosotros</option>
+                    <option value="3">Dejarnos tu opinión</option>
+                    <option value="4">Problemas con el usuario</option>
+                    <option value="5">Otros</option>
+                </select>
+            </form>
+        </fieldset>
+        <fieldset>
+            <legend>Contáctenos</legend>
+            <form id="contactForm" method="POST" action="/auth/contacto">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" onkeypress="mayus(this)" required>
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" name="apellido" onkeypress="mayus(this)" required>
+                <label for="mail">Correo electrónico:</label>
+                <input type="email" id="mail" name="mail" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}">
+                <label for="comentario">Comentarios:</label>
+                <textarea name="comentario" id="comentario" cols="45" rows="10" required>Ingrese su consulta en breve nos comunicaremos con Ud.</textarea>
+                <button type="submit">Enviar</button>
+                <button type="reset">Borrar</button>
+                <br><br>
+                <a href="index.html">Volver</a>
+            </form>
+        </fieldset>
+    </div>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+
+            fetch('/auth/contacto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    alert('¡Formulario enviado correctamente!');
+                    event.target.reset();
+                } else {
+                    alert('Error al enviar el formulario.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al enviar el formulario.');
+            });
+        });
+    </script>
+</body>
 </html>
