@@ -25,6 +25,8 @@ app.use("/auth", authRoutes);
 // Servir archivos estáticos desde la carpeta 'public'
 app.use(express.static("public"));
 
+app.use('/recetas', require ('./routes/routes.recetas'));
+
 // Ruta principal
 app.get("/", (req, res) => {
   res.send("¡Bienvenidos al proyecto Backend del grupo 18!");
@@ -34,4 +36,4 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 // Iniciar el servidor
-app.listen(PORT, () => console.log(`Servidor corriendo en https://backend-grupo18.vercel.app:${PORT}`));
+app.listen(PORT, () => console.log(`Servidor corriendo en https://localhost:${PORT}`));
