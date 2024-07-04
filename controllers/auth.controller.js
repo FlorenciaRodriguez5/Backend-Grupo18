@@ -1,5 +1,5 @@
 const db = require('../db/db');
-const { signToken, comparePasswords, encryptPassword } = require('../auth/auth');
+const { signToken, comparePasswords, encryptPassword } = require('../controllers/auth');
 
 // Registro de usuario
 exports.register = async (req, res) => {
